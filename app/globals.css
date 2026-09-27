@@ -1,0 +1,158 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-inter), var(--font-kannada), var(--font-tamil), var(--font-telugu), var(--font-hindi), var(--font-malayalam), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-cinzel), var(--font-kannada), var(--font-tamil), var(--font-telugu), var(--font-hindi), var(--font-malayalam), ui-serif, Georgia, serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  color-scheme: light;
+  --background: #fff4d6;
+  --foreground: #3b2923;
+  --card: #ffffff;
+  --card-foreground: #3b2923;
+  --popover: #ffffff;
+  --popover-foreground: #3b2923;
+  --primary: #ffcb05;
+  --primary-foreground: #3b2923;
+  --secondary: #c62828;
+  --secondary-foreground: #ffffff;
+  --muted: #f7e6bd;
+  --muted-foreground: #6b5147;
+  --accent: #a66a3f;
+  --accent-foreground: #ffffff;
+  --destructive: #c62828;
+  --border: #e8d3a3;
+  --input: #e8d3a3;
+  --ring: #a66a3f;
+  --chart-1: #ffcb05;
+  --chart-2: #c62828;
+  --chart-3: #a66a3f;
+  --chart-4: #3b2923;
+  --chart-5: #f7e6bd;
+  --radius: 0.75rem;
+  --sidebar: #fff4d6;
+  --sidebar-foreground: #3b2923;
+  --sidebar-primary: #ffcb05;
+  --sidebar-primary-foreground: #3b2923;
+  --sidebar-accent: #f7e6bd;
+  --sidebar-accent-foreground: #3b2923;
+  --sidebar-border: #e8d3a3;
+  --sidebar-ring: #a66a3f;
+}
+
+@property --wipe {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes pinwheel-cover {
+  from { --wipe: 0deg; }
+  to { --wipe: 45.5deg; }
+}
+
+@keyframes pinwheel-reveal {
+  from { --wipe: 0deg; }
+  to { --wipe: 45.5deg; }
+}
+
+.pinwheel-layer {
+  mask-image: repeating-conic-gradient(from 0deg at 50% 50%, #000 0deg var(--wipe), transparent var(--wipe) 45deg);
+  -webkit-mask-image: repeating-conic-gradient(from 0deg at 50% 50%, #000 0deg var(--wipe), transparent var(--wipe) 45deg);
+}
+
+.pinwheel-layer[data-phase='covering'] {
+  animation: pinwheel-cover 700ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.pinwheel-layer[data-phase='covered'] {
+  mask-image: none;
+  -webkit-mask-image: none;
+}
+
+.pinwheel-layer[data-phase='revealing'] {
+  mask-image: repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg var(--wipe), #000 var(--wipe) 45deg);
+  -webkit-mask-image: repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg var(--wipe), #000 var(--wipe) 45deg);
+  animation: pinwheel-reveal 700ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+.pinwheel-layer.pinwheel-lag[data-phase='covering'],
+.pinwheel-layer.pinwheel-lag[data-phase='revealing'] {
+  animation-delay: 90ms;
+  animation-fill-mode: both;
+}
+
+@keyframes blade-in {
+  from { opacity: 0; transform: rotate(-24deg) scale(0.85); }
+  to { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+
+.wheel-blade-enter {
+  transform-origin: 500px 500px;
+  animation: blade-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-blade-enter { animation: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pinwheel-layer[data-phase] { animation-duration: 1ms; animation-delay: 0ms; }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Wide tracking breaks Kannada conjunct glyphs apart. */
+html:not([lang='en']) [class*='tracking-'] {
+  letter-spacing: 0.02em;
+}

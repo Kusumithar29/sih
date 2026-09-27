@@ -1,0 +1,269 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: games
+    description: Heritage game results and progress
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+  /game-results:
+    get:
+      operationId: listGameResults
+      tags: [games]
+      summary: List completed game results
+      parameters:
+        - name: playerId
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        "200":
+          description: Completed game results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GameResult"
+    post:
+      operationId: createGameResult
+      tags: [games]
+      summary: Record a completed game
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameResultInput"
+      responses:
+        "201":
+          description: Recorded result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameResult"
+  /game-stats:
+    get:
+      operationId: getGameStats
+      tags: [games]
+      summary: Get a player's game summary and passport progress
+      parameters:
+        - name: playerId
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        "200":
+          description: Game summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameStats"
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+    GameResult:
+      type: object
+      required:
+        - id
+        - playerId
+        - gameId
+        - gameName
+        - difficulty
+        - score
+        - accuracy
+        - durationSeconds
+        - totalMoves
+        - validMoves
+        - invalidMoves
+        - stats
+        - result
+        - startedAt
+        - completedAt
+      properties:
+        id:
+          type: integer
+        playerId:
+          type: string
+        gameId:
+          type: string
+        gameName:
+          type: string
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        score:
+          type: integer
+        accuracy:
+          type: number
+        durationSeconds:
+          type: integer
+        totalMoves:
+          type: integer
+        validMoves:
+          type: integer
+        invalidMoves:
+          type: integer
+        stats:
+          type: object
+          additionalProperties:
+            type: number
+        result:
+          type: string
+          enum: [win, loss, draw]
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+    GameResultInput:
+      type: object
+      required:
+        - playerId
+        - gameId
+        - gameName
+        - difficulty
+        - score
+        - accuracy
+        - durationSeconds
+        - totalMoves
+        - validMoves
+        - invalidMoves
+        - stats
+        - result
+        - startedAt
+        - completedAt
+      properties:
+        playerId:
+          type: string
+          minLength: 1
+        gameId:
+          type: string
+          minLength: 1
+        gameName:
+          type: string
+          minLength: 1
+        difficulty:
+          type: string
+          enum: [easy, medium, hard]
+        score:
+          type: integer
+        accuracy:
+          type: number
+        durationSeconds:
+          type: integer
+        totalMoves:
+          type: integer
+        validMoves:
+          type: integer
+        invalidMoves:
+          type: integer
+        stats:
+          type: object
+          additionalProperties:
+            type: number
+        result:
+          type: string
+          enum: [win, loss, draw]
+        startedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+    GameStats:
+      type: object
+      required:
+        - totalGames
+        - completedGames
+        - bestScore
+        - bestAccuracy
+        - fastestTime
+        - attempts
+        - wins
+        - gameProgress
+        - gameStats
+        - recentResults
+      properties:
+        totalGames:
+          type: integer
+        completedGames:
+          type: integer
+        bestScore:
+          type: integer
+        bestAccuracy:
+          type: number
+        fastestTime:
+          type: integer
+        attempts:
+          type: integer
+        wins:
+          type: integer
+        gameProgress:
+          type: object
+          additionalProperties:
+            type: boolean
+        gameStats:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/GameStatsByGame"
+        recentResults:
+          type: array
+          items:
+            $ref: "#/components/schemas/GameResult"
+    GameStatsByGame:
+      type: object
+      required:
+        - bestScore
+        - bestAccuracy
+        - fastestTime
+        - attempts
+        - wins
+        - recentResults
+      properties:
+        bestScore:
+          type: integer
+        bestAccuracy:
+          type: number
+        fastestTime:
+          type: integer
+        attempts:
+          type: integer
+        wins:
+          type: integer
+        recentResults:
+          type: array
+          items:
+            $ref: "#/components/schemas/GameResult"
+

@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Karnataka Heritage Games"
+description = "A playable digital heritage experience that adds deterministic traditional Karnataka games to the existing Karnataka culture discovery site, with game history and passport progress."
+version = "1.0.0"
+id = "artifacts/heritage-games"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22496
+
+[services.development]
+run = "pnpm --filter @workspace/heritage-games run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/heritage-games", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/heritage-games/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22496"
+BASE_PATH = "/"
